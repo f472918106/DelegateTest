@@ -1,0 +1,6 @@
+D:\Study\DelegateTest\DelegateTest\bin\Debug\DelegateTest.exe.config
+D:\Study\DelegateTest\DelegateTest\bin\Debug\DelegateTest.exe
+D:\Study\DelegateTest\DelegateTest\bin\Debug\DelegateTest.pdb
+D:\Study\DelegateTest\DelegateTest\obj\Debug\DelegateTest.csprojResolveAssemblyReference.cache
+D:\Study\DelegateTest\DelegateTest\obj\Debug\DelegateTest.exe
+D:\Study\DelegateTest\DelegateTest\obj\Debug\DelegateTest.pdb
