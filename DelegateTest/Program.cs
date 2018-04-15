@@ -6,80 +6,59 @@ using System.Threading.Tasks;
 
 namespace DelegateTest
 {
-    //定义委托，它定义了可以代表的方法的类型
-    //将方法作为方法的参数，将方法动态的赋给参数
-    //减少在程序中使用大量if-else，使程序有更好的可拓展性
-    public delegate void GreetingDelegate(string name);
-    class Program
+    // Observer设计模式
+    public class Heater
     {
-        private static void EnglishGreeting(string name)
+        private int temperature;//水温 
+        public delegate void BoilHandler(int param); //声明委托
+        public event BoilHandler BoilEvent; //声明事件
+        public void BoilWater()
         {
-            Console.WriteLine("Morning, " + name);
+            for (int i = 0; i <= 100; i++)
+            {
+                temperature = i;
+            }
+
+            if (temperature > 95)
+            {
+                if (BoilEvent != null) //如果有对象注册
+                {
+                    BoilEvent(temperature); //调用所注册对象的方法
+                }
+            }
         }
-        private static void ChineseGreeting(string name)
+
+        //警报器
+        public class Alarm
         {
-            Console.WriteLine("早上好, " + name);
+            public void MakeAlert(int param)
+            {
+                Console.WriteLine("Alarm: 滴滴滴，水已经{0}度了。", param);
+            }
         }
-        //接受一个GreetingDelegate类型的方法做参数
-        private static void GreetPeople(string name,GreetingDelegate MakeGreeting)
+
+        //显示器
+        public class Display
         {
-            MakeGreeting(name);
+            public static void ShowMsg(int param) //静态方法
+            {
+                Console.WriteLine("Display: 水快开了，当前温度:{0}度。", param);
+            }
         }
-        static void Main(string[] args)
+
+        class Program
         {
-            /*
-            GreetPeople("Danny", EnglishGreeting);
-            GreetPeople("赵四", ChineseGreeting);
-            Console.ReadKey();
-            */
+            static void Main()
+            {
+                Heater heater = new Heater();
+                Alarm alarm = new Alarm();
 
-            /*
-            string name1, name2;
-            name1 = "Danny";
-            name2 = "赵四";
-            GreetPeople(name1, EnglishGreeting);
-            GreetPeople(name2, ChineseGreeting);
-            Console.ReadKey();
-            */
-
-            /*
-            GreetingDelegate delegate1, delegate2;
-            delegate1 = EnglishGreeting;
-            delegate2 = ChineseGreeting;
-            GreetPeople("Danny", delegate1);
-            GreetPeople("赵四", delegate2);
-            Console.ReadKey();
-            */
-
-            /* 将多个方法绑定到同一个委托
-            GreetingDelegate delegate1;
-            delegate1 = EnglishGreeting;    //先给委托类型的变量赋值
-            delegate1 += ChineseGreeting;   //给此委托变量再绑定一个方法
-
-            //先后调用EnglishGreeting与ChineseGreeting方法
-            GreetPeople("Danny", delegate1);
-            Console.ReadKey();
-            */
-
-            /* 也可以绕过GreetPeople方法，通过委托直接调用EnglishGreeting与ChineseGreeting方法
-            GreetingDelegate delegate1;
-            delegate1 = EnglishGreeting;
-            delegate1 += ChineseGreeting;
-            delegate1("Danny");
-            Console.ReadKey();
-            */
-
-            GreetingDelegate delegate1 = new GreetingDelegate(EnglishGreeting);
-            delegate1 += ChineseGreeting;
-
-            //先后调用EnglishGreeting与ChineseGreeting方法
-            GreetPeople("Danny", delegate1);
-            Console.WriteLine();
-
-            //取消对EnglishGreeting方法的绑定
-            delegate1 -= EnglishGreeting;
-            GreetPeople("赵四", delegate1);
-            Console.ReadKey();
+                heater.BoilEvent += alarm.MakeAlert; //注册方法
+                heater.BoilEvent += (new Alarm()).MakeAlert; //给匿名对象注册方法
+                heater.BoilEvent += Display.ShowMsg; //注册静态方法
+                heater.BoilWater(); //烧水，会自动调用注册过对象的方法
+                Console.ReadKey();
+            }
         }
     }
 }
