@@ -17,15 +17,14 @@ namespace DelegateTest
             for (int i = 0; i <= 100; i++)
             {
                 temperature = i;
-            }
-
-            if (temperature > 95)
-            {
-                if (BoilEvent != null) //如果有对象注册
+                if (temperature > 95)
                 {
-                    BoilEvent(temperature); //调用所注册对象的方法
+                    if (BoilEvent != null) //如果有对象注册
+                    {
+                        BoilEvent(temperature); //调用所注册对象的方法
+                    }
                 }
-            }
+            } 
         }
 
         //警报器
